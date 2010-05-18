@@ -33,9 +33,9 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
         //add interceptors
-        IDelegator pDel01 = pIMeta.GetDelegator(pNbSourceIUnk, "pascc.INb");
+        IDelegator pDel01 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
         PostMethods Interceptors = new PostMethods(pIOCM,pNbSourceIUnk);
-        pDel01.addPreMethod(Interceptors, "ConstantChange");
+        pDel01.addPostMethod(Interceptors, "ConstantChange");
 
         
         
@@ -44,9 +44,9 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk2.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
         
-        IDelegator pDel02 = pIMeta.GetDelegator(pNbSourceIUnk, "pascc.INb");
+        IDelegator pDel02 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk2);
-        pDel02.addPreMethod(Interceptors, "ConstantChange");
+        pDel02.addPostMethod(Interceptors, "ConstantChange");
 
         
         
@@ -55,9 +55,9 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk3.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
-        IDelegator pDel03 = pIMeta.GetDelegator(pNbSourceIUnk, "pascc.INb");
+        IDelegator pDel03 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk3);
-        pDel03.addPreMethod(Interceptors, "ConstantChange");
+        pDel03.addPostMethod(Interceptors, "ConstantChange");
         
         
 
@@ -66,9 +66,9 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk4.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
-        IDelegator pDel04 = pIMeta.GetDelegator(pNbSourceIUnk, "pascc.INb");
+        IDelegator pDel04 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk4);
-        pDel04.addPreMethod(Interceptors, "ConstantChange");
+        pDel04.addPostMethod(Interceptors, "ConstantChange");
 
         
         // A-(A+B)*(C/D)
@@ -78,29 +78,46 @@ public class TestOP {
         pILife = (ILifeCycle) pAddOpIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
+        IDelegator pDel05 = pIMeta.GetDelegator(pAddOpIUnk, "passc.INb");
+        Interceptors = new PostMethods(pIOCM,pAddOpIUnk);
+        pDel05.addPostMethod(Interceptors, "AddChange");
+        
 
         // Create the SubOp component
         IUnknown pSubOpIUnk = (IUnknown) pIOCM.createInstance("passc.SubOp", "Sub");
         pILife = (ILifeCycle) pSubOpIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
+        IDelegator pDel06 = pIMeta.GetDelegator(pSubOpIUnk, "passc.INb");
+        Interceptors = new PostMethods(pIOCM,pSubOpIUnk);
+        pDel06.addPostMethod(Interceptors, "SubChange");
+        
+        
         // Create the MulOp component
         IUnknown pMulOpIUnk = (IUnknown) pIOCM.createInstance("passc.MulOp", "Mul");
         pILife = (ILifeCycle) pMulOpIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
+        IDelegator pDel07 = pIMeta.GetDelegator(pMulOpIUnk, "passc.INb");
+        Interceptors = new PostMethods(pIOCM,pMulOpIUnk);
+        pDel07.addPostMethod(Interceptors, "MulChange");
 
+        
         // Create the DivOp component
         IUnknown pDivOpIUnk = (IUnknown) pIOCM.createInstance("passc.DivOp", "Div");
         pILife = (ILifeCycle) pDivOpIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
+        IDelegator pDel08 = pIMeta.GetDelegator(pDivOpIUnk, "passc.INb");
+        Interceptors = new PostMethods(pIOCM,pDivOpIUnk);
+        pDel08.addPostMethod(Interceptors, "DivChange");
 
-        // Create the Monitor component
+        
+  /*      // Create the Monitor component
         IUnknown pMonitorIUnk = (IUnknown) pIOCM.createInstance("passc.Monitor", "Monitor");
         pILife = (ILifeCycle) pNbSourceIUnk.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
-
+*/
         System.out.println("Created components");
 
 
@@ -123,7 +140,7 @@ public class TestOP {
         //crete the connections for root -> multiplier
         long ConnID17 = runtime.connect(root, pMulOpIUnk, "passc.INb");
         
-        // create connections with monitoring component
+      /*  // create connections with monitoring component
         long ConnID9 = runtime.connect(pMonitorIUnk, pNbSourceIUnk, "passc.INb");
         long ConnID10 = runtime.connect(pMonitorIUnk, pNbSourceIUnk2, "passc.INb");
         long ConnID11 = runtime.connect(pMonitorIUnk, pNbSourceIUnk3, "passc.INb");
@@ -132,7 +149,7 @@ public class TestOP {
         long ConnID14 = runtime.connect(pMonitorIUnk, pSubOpIUnk, "passc.INb");
         long ConnID15 = runtime.connect(pMonitorIUnk, pMulOpIUnk, "passc.INb");
         long ConnID16 = runtime.connect(pMonitorIUnk, pDivOpIUnk, "passc.INb");
-
+*/
 
 
         // Get the Nb Interface - the root of the expression tree
@@ -148,7 +165,7 @@ public class TestOP {
         pIDebug.visualise();
 
         // Get the Monitor Interface
-        IMonitor pIMonitor = (IMonitor) pMonitorIUnk.QueryInterface("passc.IMonitor");
+    //    IMonitor pIMonitor = (IMonitor) pMonitorIUnk.QueryInterface("passc.IMonitor");
 
         int iter;
         for (iter = 0; iter < 4; iter++) {
@@ -156,7 +173,7 @@ public class TestOP {
 
             //pIMonitor.monitor(); TO DO in monitor: implement reconfiguration policy !
 
-            //pIDebug.visualise();
+            pIDebug.visualise();
 
             pINb.reset();
         }
