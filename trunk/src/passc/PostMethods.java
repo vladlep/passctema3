@@ -187,8 +187,6 @@ public class PostMethods
 	    	this.nrConex ++;
 	    	int rezultat = ((Integer)result).intValue();
 	    	
-	    	
-	    	
 	    	//vrem doar 1 data sa modificam nu de fiecare data cand intra
 	    	Vector<Long> sir = new Vector<Long>();
 	    	IMetaArchitecture pIMetaArchitect = (IMetaArchitecture)this.pIOCM.QueryInterface("OpenCOM.IMetaArchitecture");
@@ -198,59 +196,19 @@ public class PostMethods
 		    
 		    if(rezultat >10 && (lungimeSir ==0 || (this.nrConex % lungimeSir) ==0 )) 
 	    	{	    		
-		    	 
-		    	IMetaInterception pIMeta = (IMetaInterception) this.pIOCM.QueryInterface("OpenCOM.IMetaInterception");
-		    	// 1. creem noua componenta
-
-				// Create the SubOp component
-		        IUnknown pSubOpIUnk = (IUnknown) pIOCM.createInstance("passc.SubOp", "Sub"+uniqueId);
-		        uniqueId++;
-		        ILifeCycle pILife = (ILifeCycle) pSubOpIUnk.QueryInterface("OpenCOM.ILifeCycle");
-		        pILife.startup(pIOCM);
-		        //add intereceptors
-		        IDelegator pDel08 = pIMeta.GetDelegator(pSubOpIUnk, "passc.INb");
-		        PostMethods Interceptors = new PostMethods(pIOCM,pSubOpIUnk);
-		        pDel08.addPostMethod(Interceptors, "SubChange");
-		        
+		    	
 		        //2.conectam la sub cele 2 componente A si B
 		        Vector<Long> lista = new Vector<Long>();
 		        pIMetaArchitect.enumConnsFromRecp(this.pIUnk,"passc.INb", lista);
-		        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponent, "passc.INb");
-		        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent, "passc.INb");
-		        
-		        //3. aflam de cine era legata veche componenta, legam la divizor si deconectam
-		    
-		        
-		        long aux;
-		        int i;
-		        for( i=0; i< lungimeSir; i++)
-		        {
-		        	aux = sir.get(i);
-		        	OCM_ConnInfo_t connInfo = this.pIOCM.getConnectionInfo(aux);
-		        	this.pIOCM.connect(connInfo.sourceComponent, pSubOpIUnk, "passc.INb");
-		        	// problema e ca a adaugat noua conexiune la sf listei si ea putea fi chiar prima
-		        	
-		        	lista = new Vector<Long>();
-					pIMetaArchitect.enumConnsFromRecp(connInfo.sourceComponent, "passc.Inb", lista);
-					
-					//verific daca prima componenta din lista este egala cu cea veche 
-					if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
-					{
-						//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
-						IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
-						this.pIOCM.disconnect(lista.get(1));
-						this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
-					}
-	
-					 this.pIOCM.disconnect(aux);
-					 this.pIOCM.deleteInstance(connInfo.sinkComponent);
-
-		        }
-		     
-	    	}   
+				IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponent;
+		        this.pIOCM.disconnect(lista.get(0));
+		        this.pIOCM.connect(pIUnk, auxiliar, "passc.INb");
+	        
+	    	}
+	        
 		}
+		     
 		return result;
-		
 	}
 	
 	public Object MulChange(String method, Object result, Object[] args,Exception e)
