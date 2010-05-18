@@ -45,7 +45,7 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk2.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
         
-        IDelegator pDel02 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
+        IDelegator pDel02 = pIMeta.GetDelegator(pNbSourceIUnk2, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk2);
         pDel02.addPostMethod(Interceptors, "ConstantChange");
 
@@ -56,7 +56,7 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk3.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
-        IDelegator pDel03 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
+        IDelegator pDel03 = pIMeta.GetDelegator(pNbSourceIUnk3, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk3);
         pDel03.addPostMethod(Interceptors, "ConstantChange");
         
@@ -67,7 +67,7 @@ public class TestOP {
         pILife = (ILifeCycle) pNbSourceIUnk4.QueryInterface("OpenCOM.ILifeCycle");
         pILife.startup(pIOCM);
 
-        IDelegator pDel04 = pIMeta.GetDelegator(pNbSourceIUnk, "passc.INb");
+        IDelegator pDel04 = pIMeta.GetDelegator(pNbSourceIUnk4, "passc.INb");
         Interceptors = new PostMethods(pIOCM,pNbSourceIUnk4);
         pDel04.addPostMethod(Interceptors, "ConstantChange");
 
