@@ -52,7 +52,7 @@ public class Root extends OpenCOMComponent implements IConnections, ILifeCycle, 
 	public int eval() {
 		Nb = m_PSR_INb.m_pIntf.getNb();
 		isEval = true;
-		return Nb;
+		return Nb; // nu ne intereseaza cat e rezultatul primit ca nu reconfiguram radacina
 	}
 
 	@Override

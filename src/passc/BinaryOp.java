@@ -64,4 +64,6 @@ public abstract class BinaryOp extends OpenCOMComponent implements IConnections,
     public boolean startup(Object pIOCM) {
         return true;
     }
+    
+   
 }

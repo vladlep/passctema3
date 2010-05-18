@@ -4,18 +4,19 @@ import OpenCOM.*;
 import java.io.*;
 
 
-public class NbSource extends OpenCOMComponent implements INb, ILifeCycle, IUnknown, IMetaInterface {
+public class NbSource extends OpenCOMComponent implements INb, ILifeCycle, IUnknown, IMetaInterface, IConstant
+{
 
     private int Nb;
     private boolean isEval;
     private String name;
-
+    private boolean isConstant;
     /** Creates a new instance of NbSource */
     public NbSource(IUnknown binder) {
         super(binder);
         Nb = 0;
         isEval = false;
-
+        isConstant = false;
     }
 
 //Interface INb implementation
@@ -51,7 +52,8 @@ public class NbSource extends OpenCOMComponent implements INb, ILifeCycle, IUnkn
     }
 
     public void reset() {
-        isEval = false;
+    	if(isConstant == false)
+    		isEval = false;
     }
 
 // ILifeCycle Interface
@@ -62,4 +64,12 @@ public class NbSource extends OpenCOMComponent implements INb, ILifeCycle, IUnkn
     public boolean startup(Object pIOCM) {
         return true;
     }
+
+    public void setVal(int nr)
+    {
+    	this.Nb = nr;
+    	isConstant = true;
+    	isEval = true;
+    }
+    
 }
