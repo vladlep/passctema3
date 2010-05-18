@@ -142,38 +142,48 @@ public class PostMethods
 		        //2.conectam la sub cele 2 componente A si B
 		        Vector<Long> lista = new Vector<Long>();
 		        pIMetaArchitect.enumConnsFromRecp(this.pIUnk,"passc.INb", lista);
-		        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponent, "passc.INb");
-		        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent, "passc.INb");
+			    
 		        
-		        //3. aflam de cine era legata veche componenta, legam la sub si deconectam
-		    
-		        
-		        long aux;
-		        int i;
-		        for( i=0; i< lungimeSir; i++)
-		        {
-		        	aux = sir.get(i);
-		        	OCM_ConnInfo_t connInfo = this.pIOCM.getConnectionInfo(aux);
-		        	this.pIOCM.connect(connInfo.sourceComponent, pSubOpIUnk, "passc.INb");
-		        	// problema e ca a adaugat noua conexiune la sf listei si ea putea fi chiar prima
-		        	
-		        	lista = new Vector<Long>();
-					pIMetaArchitect.enumConnsFromRecp(connInfo.sourceComponent, "passc.Inb", lista);
-					
-					//verific daca prima componenta din lista este egala cu cea veche 
-					if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
-					{
-						//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
-						IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
-						this.pIOCM.disconnect(lista.get(1));
-						this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
-					}
-	
-					 this.pIOCM.disconnect(aux);
-					 this.pIOCM.deleteInstance(connInfo.sinkComponent);
-
-		        }
-		     
+			        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponent, "passc.INb");
+			        this.pIOCM.connect(pSubOpIUnk, this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent, "passc.INb");
+			        
+			        //3. aflam de cine era legata veche componenta, legam la sub si deconectam
+			    
+			  
+			        long aux;
+			        int i;
+			        for( i=0; i< lungimeSir; i++)
+			        {
+			        	aux = sir.get(i);
+			        	OCM_ConnInfo_t connInfo = this.pIOCM.getConnectionInfo(aux);
+			        	this.pIOCM.connect(connInfo.sourceComponent, pSubOpIUnk, "passc.INb");
+			        	// problema e ca a adaugat noua conexiune la sf listei si ea putea fi chiar prima
+			        	
+			        	lista = new Vector<Long>();
+						pIMetaArchitect.enumConnsFromRecp(connInfo.sourceComponent, "passc.Inb", lista);
+						  if(lista.size() >1) // adica nu e sub nodul radacina
+						    {    
+								//verific daca prima componenta din lista este egala cu cea veche 
+								if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
+								{
+									//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+									IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
+									this.pIOCM.disconnect(lista.get(1));
+									this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
+								}
+				
+								 this.pIOCM.disconnect(aux);
+								 this.pIOCM.deleteInstance(connInfo.sinkComponent);						        
+						    }
+						  else
+				        	if(lista.size() ==1 ) //e nodul radacina
+				        	{
+				        		System.out.println("Schimbam primul nod de sub radacina in AddChange");
+				        		this.pIOCM.disconnect(sir.get(0));
+								this.pIOCM.connect(TestOP.pINb,pSubOpIUnk,"passc.INb");
+								this.pIOCM.deleteInstance(pIUnk);
+				        	}
+			        }
 	    	}   
 		}
 		return result;
