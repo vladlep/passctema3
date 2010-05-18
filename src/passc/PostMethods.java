@@ -93,10 +93,10 @@ public class PostMethods
 						this.pIOCM.connect(connInfo.sourceComponent, pDivOpIUnk, "passc.INb");
 			        	
 						
-						//verific daca prima componenta din lista este egala cu cea veche 
+						// rezolvam problema ce apara prin faptul ca la adaugare in lista se schimba ordinea operanzilor
 						if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
 						{
-							//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+							
 							IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
 							this.pIOCM.disconnect(lista.get(1));
 							this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
@@ -175,10 +175,10 @@ public class PostMethods
 						pIMetaArchitect.enumConnsFromRecp(connInfo.sourceComponent, "passc.Inb", lista);
 						  if(lista.size() >1) // adica nu e sub nodul radacina
 						    {    
-								//verific daca prima componenta din lista este egala cu cea veche 
+								
 								if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
 								{
-									//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+								
 									IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
 									this.pIOCM.disconnect(lista.get(1));
 									this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
@@ -303,11 +303,11 @@ public class PostMethods
 							
 				        	// problema e ca a adaugat noua conexiune la sf listei si ea putea fi chiar prima
 							
-							//verific daca prima componenta din lista este egala cu cea veche 
+							//rezolvam problema ce apara prin faptul ca la adaugare in lista se schimba ordinea operanzilor 
 								if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName) ) 
 								{
 									this.pIOCM.connect(connInfo.sourceComponent, pSubOpIUnk2, "passc.INb");
-									//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+								
 				
 									IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
 									this.pIOCM.disconnect(lista.get(1));
@@ -390,10 +390,10 @@ public class PostMethods
 							this.pIOCM.connect(connInfo.sourceComponent, pDivOpIUnk, "passc.INb");
 				        	
 							
-							//verific daca prima componenta din lista este egala cu cea veche 
+							// rezolvam problema ce apara prin faptul ca la adaugare in lista se schimba ordinea operanzilor
 							if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
 							{
-								//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+							
 								IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
 								this.pIOCM.disconnect(lista.get(1));
 								this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
