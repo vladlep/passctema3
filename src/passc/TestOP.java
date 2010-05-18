@@ -6,6 +6,7 @@ import OpenCOM.*;
 
 public class TestOP {
 
+	public static INb pINb;
     /** Creates a new instance of TestProgram */
     public TestOP() {
     }
@@ -154,7 +155,7 @@ public class TestOP {
 
         // Get the Nb Interface - the root of the expression tree
 
-        INb pINb = (INb) root.QueryInterface("passc.INb");
+         pINb= (INb) root.QueryInterface("passc.INb");
         //pMulOpIUnk.QueryInterface("passc.INb");
 
 
