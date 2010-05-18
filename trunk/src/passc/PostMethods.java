@@ -80,26 +80,38 @@ public class PostMethods
 		        int i;
 		        for( i=0; i< lungimeSir; i++)
 		        {
+ 					
 		        	aux = sir.get(i);
 		        	OCM_ConnInfo_t connInfo = this.pIOCM.getConnectionInfo(aux);
-		        	this.pIOCM.connect(connInfo.sourceComponent, pDivOpIUnk, "passc.INb");
-		        	// problema e ca a adaugat noua conexiune la sf listei si ea putea fi chiar prima
-		        	
+		        			        	
+		        	//problema e ca adauga noua conexiune la sf listei si ea poate fi chiar prima
 		        	Vector<Long> lista = new Vector<Long>();
 					pIMetaArchitect.enumConnsFromRecp(connInfo.sourceComponent, "passc.Inb", lista);
-					
-					//verific daca prima componenta din lista este egala cu cea veche 
-					if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
-					{
-						//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
-						IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
-						this.pIOCM.disconnect(lista.get(1));
-						this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
-					}
 	
-					 this.pIOCM.disconnect(aux);
+					if(lista.size() >1) // nu e radacina
+					{
+						this.pIOCM.connect(connInfo.sourceComponent, pDivOpIUnk, "passc.INb");
+			        	
+						
+						//verific daca prima componenta din lista este egala cu cea veche 
+						if(this.pIOCM.getConnectionInfo(lista.get(0)).sinkComponentName.equals(connInfo.sinkComponentName)) 
+						{
+							//daca da vom deconecta pe a 2-a si o reconectam la sfarit (a 3-a) , a.i. componenta nou introdusa avanseaza 1 pozitie
+							IUnknown auxiliar = this.pIOCM.getConnectionInfo(lista.get(1)).sinkComponent;
+							this.pIOCM.disconnect(lista.get(1));
+							this.pIOCM.connect(connInfo.sourceComponent, auxiliar, "passc.INb");
+						}
+		
+						 this.pIOCM.disconnect(aux);
+			        }
+					else
+						if(lista.size() == 1 ) // e radacina
+						{
+							System.out.println("Am schimbat nodul de sub radacina din Constant change");
+							this.pIOCM.disconnect(lista.get(0));
+							this.pIOCM.connect(TestOP.pINb, pDivOpIUnk, "passc.INb");
+						}
 		        }
-		     
 	    	}   
 		}
 		return result;
